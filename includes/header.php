@@ -68,6 +68,31 @@
                             <i class="bi bi-people"></i> Annuaire
                         </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-tools"></i> Outils
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/calculator.php">
+                                <i class="bi bi-calculator"></i> Calculateur de distance
+                            </a></li>
+                            <li><a class="dropdown-item" href="/matching.php">
+                                <i class="bi bi-stars"></i> Matching automatique
+                            </a></li>
+                            <li><a class="dropdown-item" href="/alerts.php">
+                                <i class="bi bi-bell-fill"></i> Alertes automatiques
+                            </a></li>
+                            <?php if (isTransporter()): ?>
+                            <li><a class="dropdown-item" href="/optimization.php">
+                                <i class="bi bi-shuffle"></i> Optimisation trajets
+                            </a></li>
+                            <?php endif; ?>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/analytics.php">
+                                <i class="bi bi-graph-up"></i> Analytics
+                            </a></li>
+                        </ul>
+                    </li>
                 <?php endif; ?>
             </ul>
 
