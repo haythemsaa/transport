@@ -43,6 +43,11 @@
                         <i class="bi bi-truck-front"></i> Rechercher Véhicules
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/map.php">
+                        <i class="bi bi-map"></i> Carte
+                    </a>
+                </li>
                 <?php if (isLoggedIn()): ?>
                     <?php if (isShipper()): ?>
                     <li class="nav-item">
@@ -71,7 +76,23 @@
                     <?php
                         $messageModel = new Message();
                         $unreadCount = $messageModel->getUnreadCount($_SESSION['user_id']);
+
+                        // Get notifications count
+                        $db = Database::getInstance()->getConnection();
+                        $notifStmt = $db->prepare("SELECT COUNT(*) FROM notifications WHERE user_id = ? AND is_read = 0");
+                        $notifStmt->execute([$_SESSION['user_id']]);
+                        $notificationCount = $notifStmt->fetchColumn();
                     ?>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="/notifications.php">
+                            <i class="bi bi-bell"></i> Notifications
+                            <?php if ($notificationCount > 0): ?>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    <?= $notificationCount ?>
+                                </span>
+                            <?php endif; ?>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link position-relative" href="/messages.php">
                             <i class="bi bi-chat-dots"></i> Messages

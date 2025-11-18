@@ -20,9 +20,14 @@ include 'includes/header.php';
 <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2><i class="bi bi-receipt"></i> Mes transactions</h2>
-        <?php if ($results['success'] && $results['total'] > 0): ?>
-            <span class="badge bg-primary fs-6"><?= $results['total'] ?> transaction(s)</span>
-        <?php endif; ?>
+        <div class="d-flex align-items-center gap-2">
+            <?php if ($results['success'] && $results['total'] > 0): ?>
+                <a href="/exports/transactions-csv.php" class="btn btn-outline-secondary">
+                    <i class="bi bi-download"></i> Exporter CSV
+                </a>
+                <span class="badge bg-primary fs-6"><?= $results['total'] ?> transaction(s)</span>
+            <?php endif; ?>
+        </div>
     </div>
 
     <?php if ($results['success'] && !empty($results['data'])): ?>

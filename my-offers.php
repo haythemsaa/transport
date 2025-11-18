@@ -26,13 +26,19 @@ include 'includes/header.php';
 <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2><i class="bi bi-list-ul"></i> Mes offres</h2>
-        <div class="btn-group">
-            <?php if (isShipper()): ?>
+        <div>
+            <?php if ($type === 'freight' && isShipper()): ?>
+                <a href="/exports/freight-csv.php" class="btn btn-outline-secondary me-2">
+                    <i class="bi bi-download"></i> Exporter CSV
+                </a>
                 <a href="/post-freight.php" class="btn btn-primary">
                     <i class="bi bi-plus-circle"></i> Nouvelle offre de fret
                 </a>
             <?php endif; ?>
-            <?php if (isTransporter()): ?>
+            <?php if ($type === 'vehicle' && isTransporter()): ?>
+                <a href="/exports/vehicles-csv.php" class="btn btn-outline-secondary me-2">
+                    <i class="bi bi-download"></i> Exporter CSV
+                </a>
                 <a href="/post-vehicle.php" class="btn btn-success">
                     <i class="bi bi-plus-circle"></i> Nouveau véhicule
                 </a>
