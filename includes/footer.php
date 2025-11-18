@@ -16,12 +16,24 @@
                     <li><a href="/directory.php" class="text-light text-decoration-none">Annuaire</a></li>
                 </ul>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <h6>Informations</h6>
-                <ul class="list-unstyled">
+                <ul class="list-unstyled small">
                     <li><a href="/about.php" class="text-light text-decoration-none">À propos</a></li>
+                    <li><a href="/pricing.php" class="text-light text-decoration-none">Tarifs</a></li>
+                    <li><a href="/testimonials.php" class="text-light text-decoration-none">Témoignages</a></li>
+                    <li><a href="/faq.php" class="text-light text-decoration-none">FAQ</a></li>
                     <li><a href="/contact.php" class="text-light text-decoration-none">Contact</a></li>
                     <li><a href="/terms.php" class="text-light text-decoration-none">CGU</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2">
+                <h6>Outils</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="/calculator.php" class="text-light text-decoration-none">Calculateur</a></li>
+                    <li><a href="/matching.php" class="text-light text-decoration-none">Matching</a></li>
+                    <li><a href="/alerts.php" class="text-light text-decoration-none">Alertes</a></li>
+                    <li><a href="/analytics.php" class="text-light text-decoration-none">Analytics</a></li>
                 </ul>
             </div>
             <div class="col-md-4">
