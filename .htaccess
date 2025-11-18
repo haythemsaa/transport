@@ -1,20 +1,50 @@
-# Teleroute Marketplace - Apache Configuration
+# =====================================================
+# TELEROUTE MARKETPLACE - SECURITY & PERFORMANCE
+# =====================================================
 
 # Enable Rewrite Engine
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
 
-    # Redirect to HTTPS (décommenter en production)
+    # Force HTTPS (Production)
     # RewriteCond %{HTTPS} off
     # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # Redirect www to non-www (ou vice-versa)
+    # Redirect www to non-www (or vice versa)
     # RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-    # RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+    # RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+    # Block access to sensitive files
+    RewriteRule ^\.env$ - [F,L]
+    RewriteRule ^config/.*$ - [F,L]
+    RewriteRule ^database/.*$ - [F,L]
+    RewriteRule ^logs/.*$ - [F,L]
+    RewriteRule ^\.git.*$ - [F,L]
+    RewriteRule ^composer\.(json|lock)$ - [F,L]
+    RewriteRule ^package(-lock)?\.json$ - [F,L]
+
+    # Block SQL injection attempts
+    RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+    RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [OR]
+    RewriteCond %{QUERY_STRING} (union|select|insert|drop|delete|update|cast|create|char|convert|alter|declare|exec|script|set|md5|benchmark) [NC,OR]
+    RewriteCond %{QUERY_STRING} (\.\./|\.\.\\|localhost|loopback|127\.0\.0\.1) [NC,OR]
+    RewriteCond %{QUERY_STRING} (\<|%3C).*iframe.*(\>|%3E) [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
+    # Block wp-* scanning attempts
+    RewriteRule ^wp-.*$ - [F,L]
+
+    # Block user enumeration
+    RewriteCond %{QUERY_STRING} author=\d+ [NC]
+    RewriteRule ^(.*)$ - [F,L]
 </IfModule>
 
-# Security Headers
+# =====================================================
+# SECURITY HEADERS
+# =====================================================
+
 <IfModule mod_headers.c>
     # Prevent clickjacking
     Header always set X-Frame-Options "SAMEORIGIN"
@@ -28,9 +58,19 @@
     # Referrer Policy
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
 
+    # Content Security Policy
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; img-src 'self' data: https: http:; font-src 'self' https://cdn.jsdelivr.net; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"
+
+    # Permissions Policy
+    Header always set Permissions-Policy "geolocation=(self), microphone=(), camera=(), payment=(self)"
+
+    # HSTS - Force HTTPS (uncomment in production)
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
     # Remove server signature
-    Header unset Server
+    Header always unset X-Powered-By
     Header unset X-Powered-By
+    Header unset Server
 </IfModule>
 
 # Disable Directory Browsing
@@ -70,40 +110,104 @@ AddDefaultCharset UTF-8
     ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
 
-# Protect sensitive files
-<FilesMatch "^\.">
-    Order allow,deny
-    Deny from all
+# =====================================================
+# PROTECT SENSITIVE FILES
+# =====================================================
+
+# Deny access to .htaccess and .htpasswd
+<FilesMatch "^\.ht">
+    Require all denied
 </FilesMatch>
 
+# Deny access to backup and log files
+<FilesMatch "\.(bak|log|sql|md|gitignore|dist)$">
+    Require all denied
+</FilesMatch>
+
+# Protect composer files
+<FilesMatch "^composer\.(json|lock)$">
+    Require all denied
+</FilesMatch>
+
+# Protect package.json
+<FilesMatch "^package.*\.json$">
+    Require all denied
+</FilesMatch>
+
+# Protect config files
 <FilesMatch "(config\.php|database\.php)$">
-    Order allow,deny
-    Deny from all
+    Require all denied
 </FilesMatch>
 
-# Protect uploads directory from script execution
+# =====================================================
+# FILE UPLOAD PROTECTION
+# =====================================================
+
+# Deny PHP execution in uploads directory
 <Directory "uploads">
-    <FilesMatch "\.(php|php3|php4|php5|phtml)$">
-        Order Deny,Allow
-        Deny from All
+    <FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|sh|cgi)$">
+        Require all denied
     </FilesMatch>
+    php_flag engine off
 </Directory>
+
+# Protect against malicious file uploads
+<FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|sh|cgi)$">
+    <IfModule mod_authz_core.c>
+        <RequireAll>
+            Require all granted
+            <RequireNone>
+                Require expr %{REQUEST_URI} =~ m#/uploads/#
+            </RequireNone>
+        </RequireAll>
+    </IfModule>
+</FilesMatch>
 
 # Error Pages
 ErrorDocument 404 /404.php
 ErrorDocument 403 /403.php
 ErrorDocument 500 /500.php
 
-# PHP Settings
+# =====================================================
+# PHP SECURITY SETTINGS
+# =====================================================
+
 <IfModule mod_php7.c>
+    # Disable dangerous PHP functions
+    php_flag display_errors Off
+    php_flag log_errors On
+    php_value error_log /home/user/transport/logs/php_errors.log
+
+    # Session security
+    php_flag session.cookie_httponly On
+    php_flag session.cookie_secure Off
+    php_value session.cookie_samesite Strict
+
+    # Upload limits
     php_value upload_max_filesize 10M
     php_value post_max_size 10M
     php_value max_execution_time 300
     php_value max_input_time 300
     php_value memory_limit 256M
-    php_flag display_errors Off
-    php_flag log_errors On
-    php_value error_log logs/error.log
+
+    # Disable expose PHP
+    php_flag expose_php Off
+</IfModule>
+
+# =====================================================
+# CACHE CONTROL
+# =====================================================
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|ico)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "max-age=2592000, public"
+    </FilesMatch>
+    <FilesMatch "\.(woff|woff2|ttf|eot)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
 </IfModule>
 
 # Force download for certain file types

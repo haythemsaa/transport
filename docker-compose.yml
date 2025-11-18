@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  # PHP Apache Server
+  web:
+    image: php:8.2-apache
+    container_name: teleroute-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      - APP_ENV=production
+      - DB_HOST=db
+      - DB_NAME=teleroute_marketplace
+      - DB_USER=teleroute_user
+      - DB_PASSWORD=teleroute_secure_pass_2024
+    depends_on:
+      - db
+    networks:
+      - teleroute-network
+    restart: unless-stopped
+
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: teleroute-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password_2024
+      - MYSQL_DATABASE=teleroute_marketplace
+      - MYSQL_USER=teleroute_user
+      - MYSQL_PASSWORD=teleroute_secure_pass_2024
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - teleroute-network
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+
+  # PhpMyAdmin (optionnel, pour gestion DB)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: teleroute-phpmyadmin
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=teleroute_user
+      - PMA_PASSWORD=teleroute_secure_pass_2024
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    networks:
+      - teleroute-network
+    restart: unless-stopped
+
+  # Redis (pour cache et sessions)
+  redis:
+    image: redis:7-alpine
+    container_name: teleroute-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - teleroute-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # Backup Service (cron jobs)
+  backup:
+    image: alpine:latest
+    container_name: teleroute-backup
+    volumes:
+      - db-data:/backup/db
+      - ./backups:/backup/files
+      - ./scripts:/scripts
+    networks:
+      - teleroute-network
+    command: crond -f -d 8
+    restart: unless-stopped
+
+volumes:
+  db-data:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  teleroute-network:
+    driver: bridge

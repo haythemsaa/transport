@@ -1,0 +1,118 @@
+# Teleroute Marketplace - Cron Jobs Configuration
+# Copy this to /etc/cron.d/teleroute-marketplace or add to your crontab with: crontab -e
+
+# Environment variables
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+APP_DIR=/var/www/teleroute-marketplace
+
+# =====================================================
+# BACKUPS
+# =====================================================
+
+# Full backup - Every day at 2:00 AM
+0 2 * * * www-data ${APP_DIR}/scripts/backup.sh full >> ${APP_DIR}/logs/backup.log 2>&1
+
+# Database backup - Every 6 hours
+0 */6 * * * www-data ${APP_DIR}/scripts/backup.sh database >> ${APP_DIR}/logs/backup.log 2>&1
+
+# Files backup - Every Sunday at 3:00 AM
+0 3 * * 0 www-data ${APP_DIR}/scripts/backup.sh files >> ${APP_DIR}/logs/backup.log 2>&1
+
+# =====================================================
+# MAINTENANCE
+# =====================================================
+
+# Clean old logs - Every Monday at 1:00 AM
+0 1 * * 1 www-data find ${APP_DIR}/logs -name "*.log.*" -mtime +30 -delete
+
+# Clean old sessions - Every day at 4:00 AM
+0 4 * * * www-data find /var/lib/php/sessions -mtime +1 -delete
+
+# Clean cache - Every day at 5:00 AM
+0 5 * * * www-data rm -rf ${APP_DIR}/cache/* 2>/dev/null
+
+# Clean uploads temp - Every day at 6:00 AM
+0 6 * * * www-data find ${APP_DIR}/uploads/temp -mtime +1 -delete 2>/dev/null
+
+# =====================================================
+# NOTIFICATIONS
+# =====================================================
+
+# Send pending email notifications - Every 15 minutes
+*/15 * * * * www-data php ${APP_DIR}/cron/send-notifications.php >> ${APP_DIR}/logs/cron.log 2>&1
+
+# Process saved searches / alerts - Every hour
+0 * * * * www-data php ${APP_DIR}/cron/process-alerts.php >> ${APP_DIR}/logs/cron.log 2>&1
+
+# =====================================================
+# DATA PROCESSING
+# =====================================================
+
+# Update statistics - Every day at 6:00 AM
+0 6 * * * www-data php ${APP_DIR}/cron/update-stats.php >> ${APP_DIR}/logs/cron.log 2>&1
+
+# Clean expired offers - Every day at 7:00 AM
+0 7 * * * www-data php ${APP_DIR}/cron/clean-expired-offers.php >> ${APP_DIR}/logs/cron.log 2>&1
+
+# Generate daily reports - Every day at 8:00 AM
+0 8 * * * www-data php ${APP_DIR}/cron/generate-reports.php >> ${APP_DIR}/logs/cron.log 2>&1
+
+# =====================================================
+# MONITORING
+# =====================================================
+
+# Check application health - Every 5 minutes
+*/5 * * * * www-data curl -s http://localhost/health-check.php >> ${APP_DIR}/logs/health.log 2>&1
+
+# Monitor disk space - Every hour
+0 * * * * root df -h | grep -E '^/dev/' >> ${APP_DIR}/logs/disk-usage.log 2>&1
+
+# Monitor database size - Every 6 hours
+0 */6 * * * www-data mysql -e "SELECT table_schema, ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS 'Size (MB)' FROM information_schema.tables WHERE table_schema = 'teleroute_marketplace' GROUP BY table_schema" >> ${APP_DIR}/logs/db-size.log 2>&1
+
+# =====================================================
+# PERFORMANCE
+# =====================================================
+
+# Optimize database tables - Every Sunday at 4:00 AM
+0 4 * * 0 www-data mysql teleroute_marketplace -e "OPTIMIZE TABLE users, freight_offers, vehicle_offers, messages, transactions" >> ${APP_DIR}/logs/optimize.log 2>&1
+
+# Clear query cache - Every day at 3:00 AM
+0 3 * * * www-data mysql -e "FLUSH QUERY CACHE" >> ${APP_DIR}/logs/mysql.log 2>&1
+
+# =====================================================
+# SECURITY
+# =====================================================
+
+# Scan for malware - Every day at 10:00 PM
+0 22 * * * root clamscan -r ${APP_DIR} --exclude-dir=vendor --exclude-dir=node_modules >> ${APP_DIR}/logs/malware-scan.log 2>&1
+
+# Review security logs - Every Monday at 9:00 AM
+0 9 * * 1 www-data php ${APP_DIR}/cron/security-review.php >> ${APP_DIR}/logs/security-review.log 2>&1
+
+# Update SSL certificate (Let's Encrypt) - Check every Monday at 2:00 AM
+0 2 * * 1 root certbot renew --quiet >> /var/log/letsencrypt/renew.log 2>&1
+
+# =====================================================
+# NOTES
+# =====================================================
+#
+# Installation:
+#   sudo cp scripts/crontab.example /etc/cron.d/teleroute-marketplace
+#   sudo chmod 644 /etc/cron.d/teleroute-marketplace
+#   sudo systemctl restart cron
+#
+# Test a cron job manually:
+#   sudo -u www-data /var/www/teleroute-marketplace/scripts/backup.sh full
+#
+# View cron logs:
+#   tail -f /var/www/teleroute-marketplace/logs/backup.log
+#   tail -f /var/www/teleroute-marketplace/logs/cron.log
+#
+# Check cron syntax:
+#   * * * * * = minute hour day month weekday
+#   */15 = every 15 minutes
+#   0 2 * * * = every day at 2:00 AM
+#   0 3 * * 0 = every Sunday at 3:00 AM
+#
