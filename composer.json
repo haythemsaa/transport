@@ -1,0 +1,112 @@
+{
+    "name": "teleroute/marketplace",
+    "description": "Plateforme de mise en relation pour le transport routier en Europe - Clone de Teleroute.com",
+    "type": "project",
+    "keywords": [
+        "transport",
+        "logistics",
+        "freight",
+        "marketplace",
+        "teleroute",
+        "shipping"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Teleroute Marketplace Team",
+            "email": "dev@teleroute-marketplace.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-mbstring": "*",
+        "ext-json": "*",
+        "ext-session": "*",
+        "ext-curl": "*",
+        "ext-gd": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan": "^1.10",
+        "squizlabs/php_codesniffer": "^3.7",
+        "friendsofphp/php-cs-fixer": "^3.40"
+    },
+    "suggest": {
+        "ext-redis": "Pour activer le cache Redis et améliorer les performances",
+        "ext-imagick": "Pour un meilleur traitement des images uploadées",
+        "ext-zip": "Pour la compression des backups",
+        "ext-intl": "Pour la gestion multilingue avancée"
+    },
+    "autoload": {
+        "psr-4": {
+            "Teleroute\\": "src/",
+            "Teleroute\\Helpers\\": "helpers/",
+            "Teleroute\\Models\\": "models/",
+            "Teleroute\\Controllers\\": "controllers/"
+        },
+        "files": [
+            "helpers/Database.php",
+            "helpers/Auth.php",
+            "helpers/Validator.php",
+            "helpers/Logger.php",
+            "helpers/Mailer.php",
+            "helpers/Cache.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:coverage": "phpunit --coverage-html coverage/",
+        "lint": "phpcs --standard=PSR12 helpers/ models/ controllers/",
+        "lint:fix": "phpcbf --standard=PSR12 helpers/ models/ controllers/",
+        "analyse": "phpstan analyse helpers/ models/ controllers/ --level=5",
+        "check": [
+            "@lint",
+            "@analyse",
+            "@test"
+        ],
+        "post-install-cmd": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "db:migrate": "php database/init.sh",
+        "db:seed": "php database/seed-demo-data.php",
+        "cache:clear": "rm -rf cache/* sessions/*",
+        "logs:clear": "rm -f logs/*.log"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        },
+        "platform": {
+            "php": "8.2"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts-descriptions": {
+        "test": "Lancer tous les tests PHPUnit",
+        "test:coverage": "Lancer les tests avec rapport de couverture",
+        "lint": "Vérifier le style de code PSR-12",
+        "lint:fix": "Corriger automatiquement le style de code",
+        "analyse": "Analyse statique avec PHPStan",
+        "check": "Vérification complète (lint + analyse + tests)",
+        "db:migrate": "Initialiser la base de données",
+        "db:seed": "Générer des données de test",
+        "cache:clear": "Vider le cache",
+        "logs:clear": "Vider les logs"
+    },
+    "support": {
+        "email": "support@teleroute-marketplace.com",
+        "issues": "https://github.com/teleroute/marketplace/issues",
+        "docs": "https://docs.teleroute-marketplace.com"
+    }
+}

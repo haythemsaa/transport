@@ -1,0 +1,402 @@
+{
+	"info": {
+		"_postman_id": "teleroute-marketplace-api",
+		"name": "Teleroute Marketplace API",
+		"description": "Collection complète pour tester l'API Teleroute Marketplace",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Freight Offers",
+			"item": [
+				{
+					"name": "Get All Freight Offers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/freight.php?limit=10&offset=0",
+							"host": ["{{base_url}}"],
+							"path": ["api", "freight.php"],
+							"query": [
+								{"key": "limit", "value": "10"},
+								{"key": "offset", "value": "0"}
+							]
+						},
+						"description": "Récupérer toutes les offres de fret avec pagination"
+					}
+				},
+				{
+					"name": "Get Freight by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/freight.php?id=1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "freight.php"],
+							"query": [{"key": "id", "value": "1"}]
+						}
+					}
+				},
+				{
+					"name": "Search Freight by Country",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/freight.php?origin_country=FR&destination_country=DE",
+							"host": ["{{base_url}}"],
+							"path": ["api", "freight.php"],
+							"query": [
+								{"key": "origin_country", "value": "FR"},
+								{"key": "destination_country", "value": "DE"}
+							]
+						}
+					}
+				},
+				{
+					"name": "Search Freight by Date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/freight.php?pickup_date_from=2024-11-01&pickup_date_to=2024-12-31",
+							"host": ["{{base_url}}"],
+							"path": ["api", "freight.php"],
+							"query": [
+								{"key": "pickup_date_from", "value": "2024-11-01"},
+								{"key": "pickup_date_to", "value": "2024-12-31"}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Vehicle Offers",
+			"item": [
+				{
+					"name": "Get All Vehicles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/vehicles.php?limit=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "vehicles.php"],
+							"query": [{"key": "limit", "value": "10"}]
+						}
+					}
+				},
+				{
+					"name": "Get Vehicle by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/vehicles.php?id=1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "vehicles.php"],
+							"query": [{"key": "id", "value": "1"}]
+						}
+					}
+				},
+				{
+					"name": "Search Vehicles by Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/vehicles.php?vehicle_type=Tautliner",
+							"host": ["{{base_url}}"],
+							"path": ["api", "vehicles.php"],
+							"query": [{"key": "vehicle_type", "value": "Tautliner"}]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Favorites",
+			"item": [
+				{
+					"name": "Add to Favorites",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"action\": \"add\",\n  \"offer_type\": \"freight\",\n  \"offer_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/favorites.php",
+							"host": ["{{base_url}}"],
+							"path": ["api", "favorites.php"]
+						}
+					}
+				},
+				{
+					"name": "Remove from Favorites",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"action\": \"remove\",\n  \"favorite_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/favorites.php",
+							"host": ["{{base_url}}"],
+							"path": ["api", "favorites.php"]
+						}
+					}
+				},
+				{
+					"name": "Get My Favorites",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/favorites.php",
+							"host": ["{{base_url}}"],
+							"path": ["api", "favorites.php"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Get Notifications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/notifications.php",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notifications.php"]
+						}
+					}
+				},
+				{
+					"name": "Mark as Read",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"action\": \"mark_read\",\n  \"notification_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/notifications.php",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notifications.php"]
+						}
+					}
+				},
+				{
+					"name": "Mark All as Read",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"action\": \"mark_all_read\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/notifications.php",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notifications.php"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Messages",
+			"item": [
+				{
+					"name": "Get Conversations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/messages.php",
+							"host": ["{{base_url}}"],
+							"path": ["api", "messages.php"]
+						}
+					}
+				},
+				{
+					"name": "Get Messages with User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/messages.php?user_id=2",
+							"host": ["{{base_url}}"],
+							"path": ["api", "messages.php"],
+							"query": [{"key": "user_id", "value": "2"}]
+						}
+					}
+				},
+				{
+					"name": "Send Message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"action\": \"send\",\n  \"receiver_id\": 2,\n  \"message\": \"Bonjour, je suis intéressé par votre offre.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/messages.php",
+							"host": ["{{base_url}}"],
+							"path": ["api", "messages.php"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Map Data",
+			"item": [
+				{
+					"name": "Get Active Freight Markers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/map-data.php?type=freight",
+							"host": ["{{base_url}}"],
+							"path": ["api", "map-data.php"],
+							"query": [{"key": "type", "value": "freight"}]
+						}
+					}
+				},
+				{
+					"name": "Get Active Vehicle Markers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/map-data.php?type=vehicles",
+							"host": ["{{base_url}}"],
+							"path": ["api", "map-data.php"],
+							"query": [{"key": "type", "value": "vehicles"}]
+						}
+					}
+				},
+				{
+					"name": "Get All Markers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/map-data.php",
+							"host": ["{{base_url}}"],
+							"path": ["api", "map-data.php"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Delete Operations",
+			"item": [
+				{
+					"name": "Delete Freight Offer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"type\": \"freight\",\n  \"id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/delete.php",
+							"host": ["{{base_url}}"],
+							"path": ["api", "delete.php"]
+						}
+					}
+				},
+				{
+					"name": "Delete Vehicle Offer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"type\": \"vehicle\",\n  \"id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/delete.php",
+							"host": ["{{base_url}}"],
+							"path": ["api", "delete.php"]
+						}
+					}
+				},
+				{
+					"name": "Delete Notification",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"type\": \"notification\",\n  \"id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/delete.php",
+							"host": ["{{base_url}}"],
+							"path": ["api", "delete.php"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Application Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health-check.php",
+							"host": ["{{base_url}}"],
+							"path": ["health-check.php"]
+						},
+						"description": "Vérifier la santé de l'application (DB, PHP, extensions, etc.)"
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost",
+			"type": "string"
+		}
+	]
+}

@@ -1,0 +1,81 @@
+{
+  "name": "teleroute-marketplace",
+  "version": "1.0.0",
+  "description": "Plateforme de mise en relation pour le transport routier - Clone de Teleroute.com",
+  "main": "assets/js/app.js",
+  "scripts": {
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production",
+    "build:css": "npm run minify:css",
+    "build:js": "npm run minify:js",
+    "watch": "webpack --mode development --watch",
+    "minify:css": "cleancss -o assets/css/style.min.css assets/css/style.css",
+    "minify:js": "uglifyjs assets/js/*.js -o assets/js/app.min.js --compress --mangle",
+    "lint:js": "eslint assets/js/**/*.js",
+    "lint:css": "stylelint assets/css/**/*.css",
+    "format": "prettier --write \"assets/**/*.{js,css}\"",
+    "test": "echo \"No frontend tests configured yet\"",
+    "serve": "browser-sync start --proxy 'localhost:80' --files '**/*.php, assets/css/*.css, assets/js/*.js'"
+  },
+  "keywords": [
+    "transport",
+    "logistics",
+    "freight",
+    "marketplace",
+    "teleroute",
+    "shipping",
+    "php",
+    "mysql"
+  ],
+  "author": "Teleroute Marketplace Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/teleroute/marketplace.git"
+  },
+  "bugs": {
+    "url": "https://github.com/teleroute/marketplace/issues"
+  },
+  "homepage": "https://teleroute-marketplace.com",
+  "dependencies": {
+    "bootstrap": "^5.3.2",
+    "bootstrap-icons": "^1.11.1",
+    "jquery": "^3.7.1",
+    "chart.js": "^4.4.0",
+    "leaflet": "^1.9.4",
+    "sweetalert2": "^11.10.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.5",
+    "@babel/preset-env": "^7.23.5",
+    "autoprefixer": "^10.4.16",
+    "babel-loader": "^9.1.3",
+    "browser-sync": "^2.29.3",
+    "clean-css-cli": "^5.6.3",
+    "css-loader": "^6.8.1",
+    "css-minimizer-webpack-plugin": "^5.0.1",
+    "eslint": "^8.55.0",
+    "mini-css-extract-plugin": "^2.7.6",
+    "postcss": "^8.4.32",
+    "postcss-loader": "^7.3.3",
+    "prettier": "^3.1.0",
+    "sass": "^1.69.5",
+    "sass-loader": "^13.3.2",
+    "style-loader": "^3.3.3",
+    "stylelint": "^15.11.0",
+    "terser-webpack-plugin": "^5.3.9",
+    "uglify-js": "^3.17.4",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}
