@@ -1,61 +1,265 @@
-# Teleroute Marketplace - Git Ignore
+#######################################################
+# Teleroute Marketplace - Complete Git Ignore
+# Production-ready exclusion list
+#######################################################
 
-# Configuration files with sensitive data
+# ===== Sensitive Configuration Files =====
 config/database.php
 config/.installed
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.cer
+*.crt
+credentials.json
+secrets.json
 
-# Uploaded files
+# ===== Uploaded Files =====
 uploads/*
 !uploads/.gitkeep
+!uploads/README.md
 
-# Logs
+# ===== Logs =====
 logs/*
 !logs/.gitkeep
+!logs/README.md
 *.log
+*.log.*
+error_log
+access_log
 
-# Operating System Files
+# ===== Operating System Files =====
+# macOS
 .DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
+.AppleDouble
+.LSOverride
+
+# Windows
 ehthumbs.db
 Thumbs.db
-*~
+Thumbs.db:encryptable
+desktop.ini
+$RECYCLE.BIN/
 
-# IDE Files
-.idea/
-.vscode/
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ===== IDE & Editor Files =====
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains (PhpStorm, WebStorm)
+.idea/*
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+sftp-config.json
+
+# Vim
 *.swp
 *.swo
 *.swn
+.netrwhist
+Session.vim
+
+# Emacs
+*~
+\#*\#
+.\#*
+.emacs.desktop
+.emacs.desktop.lock
+
+# Eclipse
 .project
 .settings/
-*.sublime-project
-*.sublime-workspace
+.buildpath
 
-# Composer
+# NetBeans
+nbproject/
+
+# ===== Dependency Directories =====
+# PHP Composer
 /vendor/
 composer.phar
 composer.lock
 
-# Node modules
+# Node.js
 node_modules/
-npm-debug.log
-yarn-error.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+package-lock.json
+yarn.lock
 
-# Temporary files
+# ===== Temporary & Cache Files =====
 tmp/
 temp/
-cache/
+cache/*
+!cache/.gitkeep
 *.tmp
 *.bak
 *.backup
+*.old
+*.orig
 
-# Environment files
-.env
-.env.local
-.env.*.local
+# ===== Session Files =====
+sessions/*
+!sessions/.gitkeep
+sess_*
 
-# Installation file (should be deleted after install)
-# install.php
+# ===== Database =====
+# Database dumps
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+!database/schema.sql
+!database/README.md
+
+# Database backups
+backups/*
+!backups/.gitkeep
+!backups/README.md
+*.dump
+*.backup.gz
+
+# ===== Testing =====
+# Test coverage
+coverage/
+.phpunit.result.cache
+.phpunit.cache/
+build/
+phpunit.xml
+!phpunit.xml.dist
+
+# ===== Build & Distribution =====
+dist/
+build/
+release/
+*.min.js
+*.min.css
+!assets/css/style.min.css
+!assets/js/app.min.js
+
+# ===== SSL Certificates =====
+*.cert
+*.key
+*.csr
+*.crt
+*.pem
+ssl/
+certs/
+
+# ===== Docker =====
+# Docker volumes
+docker-data/
+.docker/
+
+# ===== CI/CD =====
+.gitlab-ci-local/
+
+# ===== Miscellaneous =====
+# Installation file (delete after install)
+install.php
+
+# Backup files
+*.backup
+*.bkp
+*_backup
+*_bak
+
+# Patch files
+*.patch
+*.diff
+*.rej
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+!releases/*.zip
+
+# Large files
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+
+# ===== Documentation Build =====
+docs/_build/
+docs/.doctrees/
+site/
+
+# ===== Specific PHP Files =====
+# PHP error reporting
+php_errors.log
+error.log
+
+# ===== Redis =====
+dump.rdb
+appendonly.aof
+
+# ===== Nginx & Apache =====
+# Error logs
+*error.log
+*access.log
+
+# ===== Monitoring & Profiling =====
+*.prof
+*.trace
+xdebug/
+blackfire/
+
+# ===== Development Tools =====
+.php_cs.cache
+.php-cs-fixer.cache
+.phpcs-cache
+psalm.xml
+phpstan.neon
+
+# ===== Local Development =====
+/public/hot
+/public/storage
+storage/*.key
+
+# ===== Custom Application Files =====
+# Maintenance mode
+maintenance.flag
+down
+
+# Feature flags
+features.json
+
+# Local configuration overrides
+config.local.php
+settings.local.php

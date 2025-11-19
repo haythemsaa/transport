@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         verbose="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         stopOnFailure="false">
+
+    <!-- Test Suites -->
+    <testsuites>
+        <testsuite name="Teleroute Marketplace Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <!-- Code Coverage Configuration -->
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">helpers</directory>
+            <directory suffix=".php">models</directory>
+            <directory suffix=".php">controllers</directory>
+        </include>
+        <exclude>
+            <directory>vendor</directory>
+            <directory>tests</directory>
+            <file>config/database.php</file>
+        </exclude>
+        <report>
+            <html outputDirectory="coverage/html"/>
+            <text outputFile="coverage/coverage.txt"/>
+            <clover outputFile="coverage/clover.xml"/>
+        </report>
+    </coverage>
+
+    <!-- Logging -->
+    <logging>
+        <junit outputFile="coverage/junit.xml"/>
+    </logging>
+
+    <!-- PHP Configuration -->
+    <php>
+        <ini name="display_errors" value="1"/>
+        <ini name="error_reporting" value="-1"/>
+        <ini name="memory_limit" value="512M"/>
+
+        <!-- Environment Variables for Testing -->
+        <env name="APP_ENV" value="testing"/>
+        <env name="DB_HOST" value="localhost"/>
+        <env name="DB_NAME" value="teleroute_test"/>
+        <env name="DB_USER" value="teleroute_test"/>
+        <env name="DB_PASS" value="test_password"/>
+    </php>
+</phpunit>

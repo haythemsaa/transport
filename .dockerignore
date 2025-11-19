@@ -1,0 +1,131 @@
+#######################################################
+# Docker Ignore - Teleroute Marketplace
+# Exclude files from Docker build context
+#######################################################
+
+# ===== Version Control =====
+.git/
+.gitignore
+.gitattributes
+.github/
+
+# ===== Documentation =====
+README.md
+DEVELOPER.md
+CONTRIBUTING.md
+CHANGELOG.md
+LICENSE
+API.md
+SECURITY.md
+*.md
+docs/
+
+# ===== IDE & Editor Files =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+.DS_Store
+Thumbs.db
+
+# ===== Environment & Config =====
+.env
+.env.*
+!.env.example
+
+# ===== Logs =====
+logs/*
+*.log
+error.log
+access.log
+
+# ===== Testing =====
+tests/
+coverage/
+phpunit.xml
+.phpunit.cache/
+.phpunit.result.cache
+
+# ===== CI/CD =====
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# ===== Dependencies (reinstalled in Dockerfile) =====
+vendor/
+node_modules/
+
+# ===== Temporary & Cache =====
+tmp/
+temp/
+cache/*
+
+# ===== Build Artifacts =====
+dist/
+build/
+release/
+
+# ===== Docker =====
+docker-compose.yml
+docker-compose.*.yml
+Dockerfile*
+!Dockerfile
+.docker/
+docker-data/
+
+# ===== Uploads & User Data =====
+uploads/*
+backups/*
+
+# ===== Database =====
+*.sql
+*.sqlite
+*.db
+!database/schema.sql
+
+# ===== Scripts (not needed in container) =====
+scripts/deploy.sh
+scripts/backup.sh
+scripts/setup.sh
+scripts/crontab.example
+
+# ===== OS Files =====
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ===== Archives =====
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# ===== Large Files =====
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+
+# ===== Development Tools =====
+.php_cs.cache
+.php-cs-fixer.cache
+.phpcs-cache
+psalm.xml
+phpstan.neon
+
+# ===== Sessions =====
+sessions/*
+
+# ===== SSL Certificates (mounted at runtime) =====
+ssl/
+certs/
+*.pem
+*.key
+*.crt
