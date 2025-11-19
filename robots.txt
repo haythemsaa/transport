@@ -1,0 +1,67 @@
+# robots.txt for Teleroute Marketplace
+# https://www.robotstxt.org/
+
+# Allow all robots
+User-agent: *
+
+# Allow indexing of public pages
+Allow: /
+Allow: /index.php
+Allow: /about.php
+Allow: /pricing.php
+Allow: /contact.php
+Allow: /testimonials.php
+Allow: /faq.php
+Allow: /blog.php
+Allow: /terms.php
+
+# Disallow private/admin areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /config/
+Disallow: /database/
+Disallow: /helpers/
+Disallow: /models/
+Disallow: /includes/
+Disallow: /logs/
+Disallow: /uploads/
+Disallow: /exports/
+Disallow: /cron/
+Disallow: /scripts/
+
+# Disallow user-specific pages
+Disallow: /dashboard.php
+Disallow: /settings.php
+Disallow: /messages.php
+Disallow: /my-offers.php
+Disallow: /transactions.php
+Disallow: /notifications.php
+Disallow: /favorites.php
+Disallow: /analytics.php
+Disallow: /reports.php
+
+# Disallow auth pages
+Disallow: /login.php
+Disallow: /register.php
+Disallow: /logout.php
+Disallow: /forgot-password.php
+
+# Disallow search results (avoid duplicate content)
+Disallow: /search-freight.php?
+Disallow: /search-vehicles.php?
+
+# Disallow specific actions
+Disallow: /post-freight.php
+Disallow: /post-vehicle.php
+Disallow: /edit-*
+Disallow: /delete-*
+
+# Allow CSS and JS for proper rendering
+Allow: /assets/css/
+Allow: /assets/js/
+
+# Crawl delay (be nice to servers)
+Crawl-delay: 10
+
+# Sitemap location
+Sitemap: https://teleroute-marketplace.com/sitemap.xml
